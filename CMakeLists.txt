@@ -117,7 +117,7 @@ set(LMDB_DIR ${CMAKE_INSTALL_PREFIX}/lmdb)
 
 
 set(ExternalProject_GIT_REPOSITORY "https://github.com/google/snappy.git")
-set(ExternalProject_GIT_TAG "master")
+set(ExternalProject_GIT_TAG "main")
 set (SNAPPY_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/snappy # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
