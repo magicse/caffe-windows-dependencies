@@ -6,9 +6,20 @@ project(caffe-windows-dependencies)
 
 include (ExternalProject)
 
-find_package(Boost 1.55 REQUIRED COMPONENTS system thread filesystem date_time)
+find_package(Boost 1.60.0 REQUIRED COMPONENTS system thread filesystem date_time)
+
+#ExternalProject_Add(gflags_external
+#	PREFIX gflags
+#    GIT_REPOSITORY https://github.com/gflags/gflags.git
+#    GIT_TAG master
+#	UPDATE_DISCONNECTED 1
+	# Disable update step to avoid unnecessary network access
+    # and use of disconnected cache
+#)
 
 # gflags
+set(ExternalProject_GIT_REPOSITORY "https://github.com/gflags/gflags.git")
+set(ExternalProject_GIT_TAG "master")
 set (GFLAGS_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/gflags # set the install prefix per generator
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
@@ -16,13 +27,17 @@ set (GFLAGS_CMAKE_ARGS
      )
 
 ExternalProject_Add ( gflags 
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/gflags
-                      CMAKE_ARGS ${GFLAGS_CMAKE_ARGS}
+						GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/gflags
+						CMAKE_ARGS ${GFLAGS_CMAKE_ARGS}
                     )
 
 set(GFLAGS_DIR ${CMAKE_INSTALL_PREFIX}/gflags/CMake)
 
 # glog
+set(ExternalProject_GIT_REPOSITORY "https://github.com/google/glog.git")
+set(ExternalProject_GIT_TAG "master")
 set (GLOG_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/glog # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
@@ -31,16 +46,19 @@ set (GLOG_CMAKE_ARGS
      )
 
 ExternalProject_Add ( glog 
-                      DEPENDS gflags
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/glog
-                      CMAKE_ARGS ${GLOG_CMAKE_ARGS}
+						DEPENDS gflags
+					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/glog
+						CMAKE_ARGS ${GLOG_CMAKE_ARGS}
                     )
 
 set(GLOG_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/glog/include)
 set(GLOG_LIBRARY_RELEASE ${CMAKE_INSTALL_PREFIX}/glog/lib/glog.lib)
 set(GLOG_LIBRARY_DEBUG ${CMAKE_INSTALL_PREFIX}/glog/lib/glogd.lib)
 
-
+set(ExternalProject_GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git")
+set(ExternalProject_GIT_TAG "master")
 set (PROTOBUF_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/protobuf # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
@@ -48,13 +66,17 @@ set (PROTOBUF_CMAKE_ARGS
      )
 
 
-ExternalProject_Add ( protobuf                       
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/vsprojects           
-                      CMAKE_ARGS ${PROTOBUF_CMAKE_ARGS}
+ExternalProject_Add ( protobuf
+					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}                       
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/vsprojects           
+						CMAKE_ARGS ${PROTOBUF_CMAKE_ARGS}
                     )
 
 set(PROTOBUF_SRC_ROOT_FOLDER ${CMAKE_INSTALL_PREFIX}/protobuf)
 
+set(ExternalProject_GIT_REPOSITORY "https://github.com/google/leveldb.git")
+set(ExternalProject_GIT_TAG "master")
 set (LEVELDB_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/leveldb # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
@@ -66,9 +88,11 @@ set (LEVELDB_CMAKE_ARGS
      )
 
 
-ExternalProject_Add ( leveldb                       
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/leveldb           
-                      CMAKE_ARGS ${LEVELDB_CMAKE_ARGS}
+ExternalProject_Add ( leveldb
+					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}                       
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/leveldb           
+						CMAKE_ARGS ${LEVELDB_CMAKE_ARGS}
                     )
 
 set(LEVELDB_ROOT ${CMAKE_INSTALL_PREFIX}/leveldb)
@@ -79,30 +103,38 @@ set (LMDB_CMAKE_ARGS
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
      )
 
-ExternalProject_Add ( lmdb                       
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb        
-                      CMAKE_ARGS ${LMDB_CMAKE_ARGS}
+set(ExternalProject_GIT_REPOSITORY "https://github.com/LMDB/lmdb/tree/mdb.master/libraries/liblmdb.git")
+set(ExternalProject_GIT_TAG "master")
+ExternalProject_Add ( lmdb
+					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}                       
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb        
+						CMAKE_ARGS ${LMDB_CMAKE_ARGS}
                     )
 
 # todo FIX debug optimized libraries for lmdb
 set(LMDB_DIR ${CMAKE_INSTALL_PREFIX}/lmdb)
 
+
+set(ExternalProject_GIT_REPOSITORY "https://github.com/google/snappy.git")
+set(ExternalProject_GIT_TAG "master")
 set (SNAPPY_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/snappy # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
      )
 
-
-ExternalProject_Add ( snappy                       
-                      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/snappy        
-                      CMAKE_ARGS ${SNAPPY_CMAKE_ARGS}
+ExternalProject_Add ( snappy
+					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
+						GIT_TAG ${ExternalProject_GIT_TAG}                        
+						SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/snappy        
+						CMAKE_ARGS ${SNAPPY_CMAKE_ARGS}
                     )
 # todo FIX debug optimized libraries for snappy
 set(SNAPPY_ROOT_DIR ${CMAKE_INSTALL_PREFIX}/snappy)
 
 add_subdirectory(opencv)
-set(OpenCV_DIR ${CMAKE_INSTALL_ PREFIX}/OpenCV)
+set(OpenCV_DIR ${CMAKE_INSTALL_PREFIX}/OpenCV)
 
 add_subdirectory(hdf5)
 
