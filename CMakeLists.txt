@@ -8,14 +8,9 @@ include (ExternalProject)
 
 find_package(Boost 1.60.0 REQUIRED COMPONENTS system thread filesystem date_time)
 
-#ExternalProject_Add(gflags_external
-#	PREFIX gflags
-#    GIT_REPOSITORY https://github.com/gflags/gflags.git
-#    GIT_TAG master
-#	UPDATE_DISCONNECTED 1
-	# Disable update step to avoid unnecessary network access
-    # and use of disconnected cache
-#)
+#if(MINGW)
+#  add_definitions(-D__MINGW32__)
+#endif()
 
 # gflags
 set(ExternalProject_GIT_REPOSITORY "https://github.com/gflags/gflags.git")
@@ -23,7 +18,8 @@ set(ExternalProject_GIT_TAG "master")
 set (GFLAGS_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/gflags # set the install prefix per generator
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
-     -DBUILD_SHARED_LIBS=OFF # build static libs       
+     -DBUILD_SHARED_LIBS=OFF # build static libs
+	 UPDATE_DISCONNECTED 1
      )
 
 ExternalProject_Add ( gflags 
@@ -43,6 +39,7 @@ set (GLOG_CMAKE_ARGS
      -DBUILD_SHARED_LIBS=OFF # build static libs  
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
      -Dgflags_DIR=${CMAKE_INSTALL_PREFIX}/gflags/CMake
+	 UPDATE_DISCONNECTED 1
      )
 
 ExternalProject_Add ( glog 
@@ -58,11 +55,12 @@ set(GLOG_LIBRARY_RELEASE ${CMAKE_INSTALL_PREFIX}/glog/lib/glog.lib)
 set(GLOG_LIBRARY_DEBUG ${CMAKE_INSTALL_PREFIX}/glog/lib/glogd.lib)
 
 set(ExternalProject_GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git")
-set(ExternalProject_GIT_TAG "master")
+set(ExternalProject_GIT_TAG "main")
 set (PROTOBUF_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/protobuf # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
      #-DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
+	 UPDATE_DISCONNECTED 1
      )
 
 
@@ -76,7 +74,7 @@ ExternalProject_Add ( protobuf
 set(PROTOBUF_SRC_ROOT_FOLDER ${CMAKE_INSTALL_PREFIX}/protobuf)
 
 set(ExternalProject_GIT_REPOSITORY "https://github.com/google/leveldb.git")
-set(ExternalProject_GIT_TAG "master")
+set(ExternalProject_GIT_TAG "main")
 set (LEVELDB_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/leveldb # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
@@ -85,6 +83,7 @@ set (LEVELDB_CMAKE_ARGS
      -DBOOST_INCLUDE_DIR=${Boost_INCLUDE_DIRS}
      -DBOOST_LIBRARYDIR=${Boost_LIBRARY_DIRS}
 	 -DBoost_INCLUDE_DIR=${Boost_INCLUDE_DIR}
+	 UPDATE_DISCONNECTED 1
      )
 
 
@@ -100,11 +99,12 @@ set(LEVELDB_ROOT ${CMAKE_INSTALL_PREFIX}/leveldb)
 set (LMDB_CMAKE_ARGS 
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/lmdb # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
-     -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
+     #-DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
+	 UPDATE_DISCONNECTED 1
      )
 
-set(ExternalProject_GIT_REPOSITORY "https://github.com/LMDB/lmdb/tree/mdb.master/libraries/liblmdb.git")
-set(ExternalProject_GIT_TAG "master")
+set(ExternalProject_GIT_REPOSITORY "https://github.com/LMDB/lmdb.git")
+set(ExternalProject_GIT_TAG "mdb.master")
 ExternalProject_Add ( lmdb
 					  	GIT_REPOSITORY ${ExternalProject_GIT_REPOSITORY}
 						GIT_TAG ${ExternalProject_GIT_TAG}                       
@@ -122,6 +122,7 @@ set (SNAPPY_CMAKE_ARGS
      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/snappy # set the install prefix per generator     
      -DBUILD_SHARED_LIBS=OFF # build static libs  
      -DCMAKE_DEBUG_POSTFIX=d # add a debug postfix to the debug libs so we can install them with the release ones
+	 UPDATE_DISCONNECTED 1
      )
 
 ExternalProject_Add ( snappy
